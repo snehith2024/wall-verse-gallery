@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { mockWallpapers } from "@/data/mockWallpapers";
+import { mockWallpapers, getCategories } from "@/data/mockWallpapers";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Upload, Trash2, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,6 +21,7 @@ const Admin = () => {
   });
 
   const [wallpapers, setWallpapers] = useState(mockWallpapers);
+  const categories = getCategories();
 
   const handleInputChange = (field: string, value: string) => {
     setUploadForm(prev => ({ ...prev, [field]: value }));
@@ -118,14 +120,18 @@ const Admin = () => {
 
                 <div>
                   <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
-                    type="text"
-                    value={uploadForm.category}
-                    onChange={(e) => handleInputChange('category', e.target.value)}
-                    placeholder="e.g., Nature, Sci-Fi, Abstract"
-                    className="mt-1"
-                  />
+                  <Select value={uploadForm.category} onValueChange={(value) => handleInputChange('category', value)}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
